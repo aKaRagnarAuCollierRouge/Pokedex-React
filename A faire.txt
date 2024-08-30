@@ -1,0 +1,191 @@
+1)Créer les models pour mon Hackdex(article, Titre_attack)
+2) Création API (authentification, update, modification....), ensuite créait juste des API pour transposer mon texte
+et une API pour la barre de recherche
+3) voir si on peut pas rendre le site + modulable avec la possibilité de changer les textes balises etc... 
+style avec django
+4) donner la possibilité à des utilisateurs autorisés à pouvoir poster des articles sur une page.
+
+----------------------------------
+Creation side Sidebar
+
+1)Creation API qui renvoie les données au bon format // Fait CategoriesWithSubcategoriesAndAttacks(APIView):
+2) Consommation de l'API(=> creation d'un fichier dans service qui consomme l'API) Fait
+3) Creation boucle pour la sideBar + creation(=> DOM VIRTUEL) Fait
+
+4) Gérer les Liens vers les Pages
+    --> quand je clique sur une attaque cela doit aller chercher la page de l'attaque dans l'API=>
+    --> Créer la requête dans le frontend pour aller chercher la page
+    --> Créer le composant dynamique de contenu qui va afficher le contenu lorsque je clique sur l'attaque.
+    --> Dans le backend créer un API qui prends pour requete l'attaque et qui renvoie la page avec ses parties , ses images
+    ses sousparties etc....
+
+
+
+
+------gestion de la navbar------
+
+
+
+
+
+
+--------Ajouter une page d'ajout de page sur React, avec la possibilité d'ajouter des Parties avec un bouton + ,
+A la soumission du formulaire cela doit créer tout les modèles.
+
+
+[]
+{}
+#
+``
+
+----------------------------------AFAIRE PRIORITE
+Voir comment intégrer un éditeur HTML WYSIWYG  ou suivre un tuto pour savoir comment en créer un.
+Dans ce cas je pourrais enlever Main_part Sub_part etc.... et stocker ça dans un modele PagesAttacks
+class PageAttack(model.Model):
+    id=model.AutoField(primary_key=True)
+    attack=models.ForeginKey(model=Attack,on_delete=models.CASCADE,related_name=page_attack)
+    levelDifficult=models.ForeginKey(model=LevelDifficult,on_delete=models.SETNULL)
+    pageContent=models.TextField()
+
+// En cliquant sur la page, je pourrais afficher dans le Content centrale , des Cartes des attaques
+et lorsque je clique dessus afficher le contenu des attacks
+
+Décision--> OK Donc je vais l'intégrer dans le backend , pour cela 
+    -telecharger tiny et faire l'integrer dans l'app django
+    -changer les models notamment Contentpage replacer TextField par HTMLField
+    -créer vue et implentation dans la vue.
+    -créer un formulaire d'édition qui ajoute un model où je peux remplir tout le modele
+    -définir l'url et restreindre l'accès aux administrateurs
+    -détruire la classe image si jamais je peux introduire des images à l'intérieur de cette page.
+    
+    C'est tout.
+
+--------------------------------------------------A FAIRE 26/04---------------------------------------------------------
+2))Finir l'esthétique du site models
+-
+3)Refactorisé mon code, amélioration et essayé de comprendre dans son intégralité
+1)Après avoir cliqué sur le lien et après que le HTML Field est envoyé dans le Content:
+    -analysé le HTML , sortir les titres principaux et les sous titres , bref le plan de la page.
+    Le mieux c'est d'avoir un onglet en dessous que l'on peut ouvrir avec des liens qui sont reliés aux titres des pages.
+
+1) Comprendre pourquoi les images ne sont pas affichés et y remedié, Si ca ne marche vraiment pas, 
+crée une API, et stocké les images statics dans le backend.
+
+
+
+------------------------------------------A FAIRE 02/05/24
+Compte user: papat@gmail.com
+MDP: azazAA233"&
+
+1) Finir la connexion/inscription de l'utilisateur:
+    inscription 
+        a)Rediriger vers la page de connexion  
+        b)confirmation de l'email avant la Création
+    login/authentification
+        a) donner un token à l'utilisateur authentifier
+        b) modifier les requetes API pour les ressources des attaques et faire des vérification 
+        en fonction du type de compte de l'utilisateur.
+        ==> lorsque l'utilisateur est authentifié , lors de l'accès à certaines ressources(pages attack)
+            1) identifié l'utilisateur grace au token   
+            2) regardé le type de compte de l'utilisateur
+            3) regardé s'il a le droit d'accéder à cette requête
+            4) si il n'a pas le droit renvoyé une page pourrais
+
+Frontend: -Quand l'utilisateur n'est pas authentifié , les attaques disposant d'un certain type de compte sont 
+bloqués (image cadenas et on ne peut pas cliqué dessus, éventuellement un petit popup apparait ou il est marqué ,
+indisponible.)
+        -Lors de la connexion les attaques disposant des privilèges suffisant doivent être débloquer et les pages doivent être accessibles.
+
+
+*****Voilà comment faire pour gérer la redirection :********
+
+Dans ce cas, vous pouvez configurer votre backend Django pour renvoyer un code d'état approprié 
+(par exemple, 401 pour non autorisé) lorsqu'un utilisateur non authentifié tente d'accéder à une 
+ressource protégée. Ensuite, dans votre application React, vous pouvez intercepter cette réponse et 
+rediriger l'utilisateur vers une page de connexion ou une autre route appropriée.
+
+Voici comment vous pouvez le faire :
+
+    Configurer votre backend Django : Dans votre vue Django qui gère l'authentification, assurez-vous 
+    de renvoyer une réponse avec un code d'état approprié (par exemple, 401 Unauthorized) si l'utilisateur 
+    n'est pas authentifié ou n'a pas les autorisations nécessaires pour accéder à la ressource demandée.
+
+    Intercepter les réponses HTTP dans votre application React : Utilisez un package comme Axios pour 
+    effectuer des requêtes HTTP dans votre application React. Vous pouvez intercepter les réponses HTTP 
+    pour vérifier si elles renvoient un code d'état 401.
+
+    Redirection de l'utilisateur non authentifié : Si une réponse renvoie un code d'état 401, vous pouvez 
+    rediriger l'utilisateur vers une page de connexion ou une autre route appropriée en utilisant React Router.
+
+Voici un exemple de code dans votre application React pour illustrer cela :
+
+jsx
+
+import React, { useEffect, useState } from 'react';
+import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
+import axios from 'axios';
+import LoginPage from './LoginPage';
+import DashboardPage from './DashboardPage';
+
+const App = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    // Fonction pour vérifier l'authentification lors du chargement de l'application
+    const checkAuthentication = async () => {
+      try {
+        // Effectuer une requête vers votre backend pour vérifier l'authentification
+        const response = await axios.get('/api/check-authentication');
+        setIsAuthenticated(true);
+      } catch (error) {
+        // Si la requête renvoie une erreur 401, l'utilisateur n'est pas authentifié
+        if (error.response.status === 401) {
+          setIsAuthenticated(false);
+        }
+      }
+    };
+
+    checkAuthentication();
+  }, []);
+
+  return (
+    <Router>
+      <Switch>
+        <Route exact path="/login">
+          <LoginPage />
+        </Route>
+        <Route exact path="/dashboard">
+          {/* Redirigez l'utilisateur vers la page de connexion s'il n'est pas authentifié */}
+          {isAuthenticated ? <DashboardPage /> : <Redirect to="/login" />}
+        </Route>
+      </Switch>
+    </Router>
+  );
+};
+
+export default App;
+
+Dans cet exemple :
+
+    Lorsque l'application est chargée, elle vérifie si l'utilisateur est authentifié en effectuant une 
+    requête HTTP vers une URL de vérification d'authentification (/api/check-authentication).
+    Si la requête réussit, l'utilisateur est considéré comme authentifié et isAuthenticated est défini sur true.
+    Si la requête renvoie une erreur 401, l'utilisateur n'est pas authentifié et isAuthenticated est 
+    défini sur false.
+    Sur la route protégée (/dashboard), si l'utilisateur n'est pas authentifié, il est redirigé vers la 
+    page de connexion (/login). Sinon, il est autorisé à accéder au tableau de bord.
+
+
+    ------------Regler le probleme de token
+      -l'utilisateur est bien authentifié et l'user existe bien
+      Ok donc c'est bon mais je n'ai pas les claims du type de compte , je n'ai pas réussit à les ajouter
+==> Il faut que je règle le probleme de claim...
+  A faire avec: Lorsque l'user est connecté et a les tokens de session stocké sur le navigateur,
+  1) Changer la page Login par Logout et enlever l'onglet Sign in
+  2) Redirigé vers le Home si il tente d'accéder à cette page => codition d'accès et qu'il na pas de token stocké
+  3) vue de deconnexion avec suppression du token de session
+
+    
+
+    
+

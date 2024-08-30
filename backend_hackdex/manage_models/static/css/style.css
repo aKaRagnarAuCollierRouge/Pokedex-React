@@ -1,0 +1,109 @@
+
+html, body {
+    margin: 0;
+    padding: 0;
+    background-color: #F9F9F9;
+    padding-top:25px;
+}
+
+nav {
+    background-color:  #333333;
+    height: 50px;
+    width: 100%; 
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+    border:solid #CCCCCC 2px; 
+    position: fixed; 
+    top: 0; 
+    z-index: 1000; 
+}
+
+
+.ul-nav {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+li {
+    list-style: none;
+   
+}
+
+
+
+
+
+
+.ul-nav li a {
+    text-decoration: none;
+    color: #FFFFFF;
+    padding: 0 10px; 
+    position: relative; 
+   
+}
+
+a{
+    text-decoration:none;
+}
+
+
+.ul-nav li a:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    border-right: 1px solid white; 
+    
+
+}
+h1{display:flex;
+    justify-content: center;}
+h1{
+    color:#333333;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);}
+
+    .category {
+        color: #FF6347; /* Rouge clair */
+        font-size: 30px;
+        font-weight: bold;
+        transition: color 0.2s ease;
+    }
+    
+    .subcategory {
+        color: #4169E1; /* Bleu royal */
+        font-size: 15px;
+        font-weight: bold;
+        transition: color 0.2s ease;
+    }
+    
+    .attack {
+        color: #32CD32; /* Vert lime */
+        font-size: 12px;
+        transition: color 0.2s ease;
+    }
+    
+    /* Changement de couleur lors du survol */
+    .category:hover {
+        color: #FF4500; /* Orange */
+    }
+    
+    .subcategory:hover {
+        color: #0000CD; /* Bleu moyen */
+    }
+    
+    .attack:hover {
+        color: #ADFF2F; /* Vert citron */
+    }
+    
+    /* Effet de pression lors du clic */
+    .pressed {
+        transform: translateY(2px); /* Déplacement vers le bas de 2 pixels */
+    }
+
+  
+/* {}  */ 
+

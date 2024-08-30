@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arbre de catégories</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="{% static 'js/event.js' %}"></script>
+</head>
+<body>
+    <nav>
+        <ul class="ul-nav">
+            <li><a href="http://127.0.0.1:8000/admin/">Go to admin page</a>
+           <li> <a href="http://127.0.0.1:8000/admin/backend_api/category/add">ADD Category</a></li>
+           <li><a href="http://127.0.0.1:8000/admin/backend_api/subcategory/add">ADD SubCategory </a></li>
+           <li> <a href="http://127.0.0.1:8000/admin/backend_api/attack/add"> ADD ATTACKS </a></li>
+        </ul>
+    </nav>
+    <h1>Arbre de catégories</h1>
+    <ul id="categories">
+        {% for category, subcategories in categories.items %}
+            <li ><a class="category" href="http://127.0.0.1:8000/admin/backend_api/category/{{ category }}">{{ category }}</a></li>
+            <ul class="subcategories">
+                {% for subcategory, data in subcategories.subcategories.items %}
+                    <li ><a class="subcategory" href="http://127.0.0.1:8000/admin/backend_api/subcategory/{{ subcategory }}">{{ subcategory }}</a></li>
+                    <ul class="attacks">
+                        {% for attack in data.attacks %}
+                        <li><a class="attack" href="http://127.0.0.1:8000/admin/backend_api/attack/{{ attack.id }}/">{{ attack }}</a></li>
+                        {% endfor %}
+                    </ul>
+                {% endfor %}
+            </ul>
+        {% endfor %}
+    </ul>
+</body>
+</html>
